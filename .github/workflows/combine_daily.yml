@@ -1,0 +1,74 @@
+name: Daily Refresh (Last 6 Days)
+
+on:
+  schedule:
+    - cron: '0 3 * * *'          # ~9:00 AM PKT (UTC+5 = 4:00 UTC)
+    - cron: '30 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  daily-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120          # ← 2 hours - safe for your workload
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir \
+            pandas google-cloud-storage google-cloud-bigquery pandas-gbq requests google-ads
+
+      - name: Create google-ads.yaml
+        env:
+          GADS_DEVELOPER_TOKEN: ${{ secrets.GADS_DEVELOPER_TOKEN }}
+          GADS_CLIENT_ID: ${{ secrets.GADS_CLIENT_ID }}
+          GADS_CLIENT_SECRET: ${{ secrets.GADS_CLIENT_SECRET }}
+          GADS_REFRESH_TOKEN: ${{ secrets.GADS_REFRESH_TOKEN }}
+        run: |
+          cat << EOF > google-ads1.yaml
+          developer_token: $GADS_DEVELOPER_TOKEN
+          client_id: $GADS_CLIENT_ID
+          client_secret: $GADS_CLIENT_SECRET
+          refresh_token: $GADS_REFRESH_TOKEN
+          use_proto_plus: True
+          api_version: 'v17'
+          EOF
+          
+        # ── Google Ads Config 2 ─────────────────────────────────────
+      - name: Create google-ads2.yaml (Account 2)
+        env:
+          GADS_DEVELOPER_TOKEN: ${{ secrets.GADS_DEVELOPER_TOKEN }}
+          GADS_CLIENT_ID_2: ${{ secrets.GADS_CLIENT_ID_2 }}
+          GADS_CLIENT_SECRET_2: ${{ secrets.GADS_CLIENT_SECRET_2 }}
+          GADS_REFRESH_TOKEN_2: ${{ secrets.GADS_REFRESH_TOKEN_2 }}
+        run: |
+          cat << EOF > google-ads2.yaml
+          developer_token: $GADS_DEVELOPER_TOKEN
+          client_id: $GADS_CLIENT_ID_2
+          client_secret: $GADS_CLIENT_SECRET_2
+          refresh_token: $GADS_REFRESH_TOKEN_2
+          use_proto_plus: True
+          api_version: 'v17'
+          EOF
+
+      - name: Run daily refresh (delete last 6 days + append)
+        env:
+          GCP_CREDENTIALS_BASE64: ${{ secrets.GCP_CREDENTIALS_BASE64 }}
+          GCP_CREDENTIALS_BASE64_2: ${{ secrets.GCP_CREDENTIALS_BASE64_2 }}
+          GCP_CREDENTIALS_BASE64_3: ${{ secrets.GCP_CREDENTIALS_BASE64_3 }}
+          GCP_CREDENTIALS_BASE64_BQ: ${{ secrets.GCP_CREDENTIALS_BASE64_BQ }}
+          BIGQUERY_PROJECT_ID: ${{ secrets.BIGQUERY_PROJECT_ID }}
+          BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
+          BIGQUERY_TABLE_ID: ${{ secrets.BIGQUERY_TABLE_ID }}  
+          CLIENT_ID_MOBI_PIXEL: ${{ secrets.CLIENT_ID_MOBI_PIXEL }}
+          CLIENT_SECRET_MOBI_PIXEL: ${{ secrets.CLIENT_SECRET_MOBI_PIXEL }}
+          REFRESH_TOKEN_MOBI_PIXEL: ${{ secrets.REFRESH_TOKEN_MOBI_PIXEL }}
+        run: python combine_daily.py
