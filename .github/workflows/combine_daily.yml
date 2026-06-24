@@ -42,22 +42,6 @@ jobs:
           api_version: 'v17'
           EOF
           
-        # ── Google Ads Config 2 ─────────────────────────────────────
-      - name: Create google-ads2.yaml (Account 2)
-        env:
-          GADS_DEVELOPER_TOKEN: ${{ secrets.GADS_DEVELOPER_TOKEN }}
-          GADS_CLIENT_ID_2: ${{ secrets.GADS_CLIENT_ID_2 }}
-          GADS_CLIENT_SECRET_2: ${{ secrets.GADS_CLIENT_SECRET_2 }}
-          GADS_REFRESH_TOKEN_2: ${{ secrets.GADS_REFRESH_TOKEN_2 }}
-        run: |
-          cat << EOF > google-ads2.yaml
-          developer_token: $GADS_DEVELOPER_TOKEN
-          client_id: $GADS_CLIENT_ID_2
-          client_secret: $GADS_CLIENT_SECRET_2
-          refresh_token: $GADS_REFRESH_TOKEN_2
-          use_proto_plus: True
-          api_version: 'v17'
-          EOF
 
       - name: Run daily refresh (delete last 6 days + append)
         env:
