@@ -10,13 +10,14 @@ COMBINED_TABLE = os.environ['BIGQUERY_TABLE_ID']
 # Play Console buckets → name & ID mapping
 # ────────────────────────────────────────────────
 financial_buckets_1 = {
+    'Rosy Apps Studio': 'pubsite_prod_8988929219322388461',
+    'Hifi Studio': 'pubsite_prod_4883153693061392761'
 }
 
 financial_buckets_2 = {
 }
 
 financial_buckets_3 = {
-    'Rosy Apps Studio': 'pubsite_prod_8988929219322388461'
 }
 
 play_id_to_name = {v: k for k, v in financial_buckets_1.items()}
@@ -50,5 +51,7 @@ customer_ids = customer_ids_account1 + customer_ids_account2
 
 customer_id_to_account_name = {
     "8193128547": "Rosy Apps-USD", 
-    "1753030144": "WA-USD"
+    "1753030144": "WA-USD",
+    "2597822203": "Airnet Information Technology LLC"
+    
 }
