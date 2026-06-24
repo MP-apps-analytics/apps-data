@@ -62,8 +62,6 @@ jobs:
       - name: Run daily refresh (delete last 6 days + append)
         env:
           GCP_CREDENTIALS_BASE64: ${{ secrets.GCP_CREDENTIALS_BASE64 }}
-          GCP_CREDENTIALS_BASE64_2: ${{ secrets.GCP_CREDENTIALS_BASE64_2 }}
-          GCP_CREDENTIALS_BASE64_3: ${{ secrets.GCP_CREDENTIALS_BASE64_3 }}
           GCP_CREDENTIALS_BASE64_BQ: ${{ secrets.GCP_CREDENTIALS_BASE64_BQ }}
           BIGQUERY_PROJECT_ID: ${{ secrets.BIGQUERY_PROJECT_ID }}
           BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
