@@ -133,10 +133,6 @@ def map_country_code(code):
 buckets = {}
 for acc, b in financial_buckets_1.items():
     buckets[acc] = {'bucket': b, 'client': storage_client_1}
-for acc, b in financial_buckets_2.items():
-    buckets[acc] = {'bucket': b, 'client': storage_client_2}
-for acc, b in financial_buckets_3.items():
-    buckets[acc] = {'bucket': b, 'client': storage_client_3}
 
 # ────────────────────────────────────────────────
 # For daily: months needed
