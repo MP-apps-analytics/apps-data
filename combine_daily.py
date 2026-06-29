@@ -18,7 +18,7 @@ from google.ads.googleads.errors import GoogleAdsException
 # Import shared constants
 from accounts_common import (
     PROJECT_ID, DATASET_ID, COMBINED_TABLE,
-    financial_buckets_1, financial_buckets_2, play_id_to_name,financial_buckets_3,
+    financial_buckets_1, play_id_to_name,
     admob_accounts, admob_id_to_name,
     customer_ids, customer_id_to_account_name
 )
@@ -27,23 +27,15 @@ from accounts_common import (
 # GCP Credentials from GitHub Secrets
 # ────────────────────────────────────────────────
 cred_path_1 = '/tmp/sa1.json'
-cred_path_2 = '/tmp/sa2.json'
-cred_path_3 = '/tmp/sa3.json'
 cred_path_bq = '/tmp/sa-bq.json'
 
 with open(cred_path_1, 'wb') as f: f.write(base64.b64decode(os.environ['GCP_CREDENTIALS_BASE64']))
-with open(cred_path_2, 'wb') as f: f.write(base64.b64decode(os.environ['GCP_CREDENTIALS_BASE64_2']))
-with open(cred_path_3, 'wb') as f: f.write(base64.b64decode(os.environ['GCP_CREDENTIALS_BASE64_3']))
 with open(cred_path_bq, 'wb') as f: f.write(base64.b64decode(os.environ['GCP_CREDENTIALS_BASE64_BQ']))
 
 credentials_1 = service_account.Credentials.from_service_account_file(cred_path_1)
-credentials_2 = service_account.Credentials.from_service_account_file(cred_path_2)
-credentials_3 = service_account.Credentials.from_service_account_file(cred_path_3)
 credentials_bq = service_account.Credentials.from_service_account_file(cred_path_bq)
 
 storage_client_1 = storage.Client(credentials=credentials_1)
-storage_client_2 = storage.Client(credentials=credentials_2)
-storage_client_3 = storage.Client(credentials=credentials_3)
 bq_client = bigquery.Client(credentials=credentials_bq)
 
 # ────────────────────────────────────────────────
